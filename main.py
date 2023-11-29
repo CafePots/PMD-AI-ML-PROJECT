@@ -7,7 +7,6 @@ import subprocess as sp
 import cv2 as cv
 from pyvirtualdisplay import Display
 from ewmh import EWMH
-from PIL import ImageGrab
 import os, sys, json, math, datetime, time, threading
 print('[',datetime.datetime.now(),']','Program is Running...')
 #i picked a game that i want to make an ai for, i want to try and make an ai that can play Tunic.
