@@ -185,7 +185,7 @@ def testController():
 def StartUp():
     
     while (str(ewmh.getWmName(ewmh.getActiveWindow())) != "b'mGBA'"):
-        print('waiting for emulator...')
+        print('waiting for emulator and/or rom...')
         #print(ewmh.getWmName(ewmh.getActiveWindow()))
         swapToMGBA()
     print('set to mGBA')
