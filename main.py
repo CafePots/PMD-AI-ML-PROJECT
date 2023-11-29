@@ -14,9 +14,7 @@ print('[',datetime.datetime.now(),']','Program is Running...')
 #pyboy is a tool that bas functionality for AI and all that stuff :)
 #it only supports gb and gbc rn :(
 
-##set virtual display
-#with Display():
-#    screen = np.array(ImageGrab.grab(bbox=(364, 170, 1561, 972)))
+ScreenLocation = None #defined later at start up for when the startup process is run
 
 #dictionary of the personality questions <"question",["options"]>
 personality ={
@@ -106,10 +104,11 @@ def swapToMGBA():
         if ewmh.getWmName(Window) == "b'mGBA'":
             ewmh.setActiveWindow(Window)
             ewmh.display.flush()
-            pag.moveTo(pag.size/2)
-            pag.click(pag.size/2)
+            location = pag.locateAllOnScreen("SL1/PMD-AI-ML-PROJECT/imgs/Safe-StartupScreen.png",confidence=0.9)
+            pag.click(pag.center(location))
             print('[',datetime.datetime.now(),']','%s active'% (GameName))
-            break
+            if (location != None):
+                return location
 #defining GBA controls as functions to make it easier to read
 #also bc this is kinda rudamentrary it makes it easier to change how they work later when im not being lazy
 def up():
@@ -184,9 +183,10 @@ def testController():
 def StartUp():
     
     while (str(ewmh.getWmName(ewmh.getActiveWindow())) != "b'mGBA'"):
-        print('waiting for emulator and/or rom...')
+        print('waiting for emulator and/or rom...') #if you are having issues here, either mgba is not booting or you do not have the rom, or it is not named correctly.
         #print(ewmh.getWmName(ewmh.getActiveWindow()))
-        swapToMGBA()
+        ScreenLocation = swapToMGBA()
+        print("Screen Location:",ScreenLocation)
     print('set to mGBA')
     testTrl.start()
     testTrl.join()
