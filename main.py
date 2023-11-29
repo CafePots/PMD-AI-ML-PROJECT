@@ -48,7 +48,34 @@ personality ={
     "Grab any digit on your left hand with your right, which finger do you grab?":["Thumb","Index Finger","middle finger","ring finger","little finger"],
     "You are suddenly locked in a pitch black room, what do you do?":["Kick the door","cry","clean it"],
     "can you go into a haunted house?":["No Problem!","Uh...N-no...","With somone i like"],
-    "":[]
+    "You receive a gift! But you don't know what's in it. You're curious, so what do you do?":["open it now.","open it later.","Get somone to open it."],
+    "You win the lottery, what do you do with the money?":["Spend it now.","Save it","give it away"],
+    "you come across a treasure chest, what do you do?":["open it right away","No... could be a trap...","Its going to be empty..."],
+    "Your friend fails to show up at a meeting on the promised time, what do you do?":["Become Irritated","Wait patiently","Get angy and bail"],
+    "Your country leader is in front of you how do you speak to them?":["speak calmly","Speak nervous","WHATEVER!!"],
+    "Do you tell others to watch what they say?":["yes","no"],
+    "Do you think you are cool? Be honest.":["yes","no"],
+    "Can you sincerely thank somone when you feel greatful?":["yes","no"],
+    "Do you occasionally coinsider yourself dull or overly cautious?":["yes","no"],
+    "Do you dream of lounging around idly without much excitement?":["yes","no"],
+    "Do you like to fight?":["yes","no"],
+    "Do you often yawn?":["yes","no"],
+    "Are you often late for school or meetings?":["yes","no"],
+    "Do you get the feeling that you have slowed down recently?":["yes","no"],
+    "It's a pleasant day at the beach, how do you feel?":["this feels great","Snore...","i want to go home soon"],
+    "Do you fall asleep without noticing?":["yes","no"],
+    "Do you feel lonesome when you are alone?":["yes",'no'],
+    "Do you hate to be the last person to leave class at the end of the day?":["yes","no"],
+    "What do you do with your room lights when you are going to bed at night?":["leave it on.","turn it off"],
+    "It's a weekend but no one will play with you, what do you do?":["go on a trip","hang around vacantly","huddle in a corner"], #Eat ass and smoke grass
+    "Do you sometimes run out of things to do all of the sudden?":["yes","no"],
+    "How quick do you respond to an email?":["right away!","May reply, may not.","Too much trouble"],
+    "there is a person you like but no oportunity to get close. what do you do?":["Bravly declare my love","Might say hello...","pull a prank to get attention","look from afar"],
+    "The road forks left and right you are told there is treasure on the right. what do you do?":["instanty go right","its a trap, go left","choose either side"],
+    "On vacation outings, you want to...":["go alone","go with others"],
+    "its the summer festival! Do you like carnivals?":["Love them!","Don't care"],
+    'Sombody calls you "weird but funny." How does that make you feel?':["Happy!","Not Happy."],
+    "Are you a boy or a girl?":["Male","Female"] # :(
 }
 
 #instance thee class
