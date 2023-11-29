@@ -37,7 +37,7 @@ GameName = "PMDRRT.gba"
 def runMGBA():
     #mGBA with PMD final decision
     print('[',datetime.datetime.now(),']','Running %s'% (GameName))
-    sp.run(['mgba','-7','SL1/%s'%(GameName)],stdin=sp.PIPE,text=True)
+    sp.run(['mgba','-7','SL1/PMD-AI-ML-PROJECT/%s'%(GameName)],stdin=sp.PIPE,text=True)
     
 #this should swap to mGBA
 def swapToMGBA():
