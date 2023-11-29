@@ -15,11 +15,43 @@ print('[',datetime.datetime.now(),']','Program is Running...')
 #pyboy is a tool that bas functionality for AI and all that stuff :)
 #it only supports gb and gbc rn :(
 
-#set virtual display
-with Display():
-    screen = np.array(ImageGrab.grab(bbox=(364, 170, 1561, 972)))
+##set virtual display
+#with Display():
+#    screen = np.array(ImageGrab.grab(bbox=(364, 170, 1561, 972)))
 
-#instance the class
+#dictionary of the personality questions <"question",["options"]>
+personality ={
+    "A test is coming up. how do you study for it?":["Study Hard","At the last seccond","ignore it and play"],
+    "Can you focus on somthing you like?":["yes","no"],
+    "There is a bucket. if you put water in it, how high will you fill it?":["Full","half","a Little"],
+    "If you are offered a choice of two gifts. Which do you take?":["Big Box","Small Box"],
+    "You broke a rotten egg in your room! What will you do?":["Open a window right away.","Take a sniff first."],
+    "A friend brought something you've forgotten, how do you thank them":["say thank you regularly.","say thanks with a joke.","say thanks but be cool."],
+    "There is a wallet at the side of a road.":["Turn it in to the police","Yay!Yay!","Is anyone watching?"],
+    "You're going bungee jumping for the first time. Since it's scary, you decide to test the jump with a doll... And the bungee cord snaps! Will you still try to make a jump anyway?":["yes","no"],
+    "There is an alien invasion! What will you do?":[["Fight",{'You valiantly fight the aliens... But, you are defeated... An alien says to you... "YOU HAVE IMPRESSED US. IT WAS A PLEASURE TO SEE. JOIN US, AND TOGETHER WE SHALL RULE THE WORLD." What will you do?':['Rule with the aliens','Refuse']}],"Run","Ignore it"],#if you select FIGHT there is a seccond part to the question
+    "There is a scream from behind a door! How will you react?":["Yank the door open","Scream in unison"],
+    "A delinquent is hassling a girl on a busy city street! What will you do?":["Help without hesitation","Help, even if scared","Call the police","Do nothing out of fear"],
+    "Are you a cheerful personality?":["yes","No"],
+    "Do you like to noisily enjoy yourself with others?":["yes","no"],#what a weird way to say it lol
+    "Its the summer holliday, Where do you wish to go?":["the beach","the spa","anywhere"],
+    "A foreign person has started up a conversation with you. To be honest, you don't have a clue what this fellow is saying. How do you reply?":["Haha! yes very funny","Um... could you say that again?","Right... well i gotta go"],
+    "have you ever made a pitfall trap":["yes","no"],
+    "Do you like pranks?":["yes","no"],
+    "are there many things that you would like to do?":["yes","no"],
+    "your friend is being bullied what do you do?":["Face up to the bully","Caution the bully from afar","heckle the bully from behind"],
+    "Do you like groan-inducing puns?":["Love them!","A little","Spare me"],
+    "Do you tend to laugh a lot?":["yes","no"],
+    "Do others often call you childish?":["yes","no"],
+    "Do you like to imagine things for your amusement?":["yes","no"],
+    "A human hand extends out of the toilet. What do you do?":["Scream and run","close the lid without a word","Shake hands with it"],
+    "Grab any digit on your left hand with your right, which finger do you grab?":["Thumb","Index Finger","middle finger","ring finger","little finger"],
+    "You are suddenly locked in a pitch black room, what do you do?":["Kick the door","cry","clean it"],
+    "can you go into a haunted house?":["No Problem!","Uh...N-no...","With somone i like"],
+    "":[]
+}
+
+#instance thee class
 ewmh = EWMH()
 def getGBAWindowInfo():
     # Get a list of all visible windows
