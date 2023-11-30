@@ -195,9 +195,10 @@ def StartUp():
 
 #ViewPort and controls
 def Play():
-    VPList = list(ViewPort)
+    VPList = list(ViewPort[0])
+    print(VPList)
     while True:
-        screen = np.array(ImageGrab.grab(bbox=(ViewPort[0],ViewPort[1],ViewPort[2],ViewPort[3])))
+        screen = np.array(ImageGrab.grab(bbox=(VPList)))
         cv.imshow('ViewPort',cv.cvtColor(screen,cv.COLOR_BGR2RGB))
 
 
@@ -211,7 +212,7 @@ playGame = threading.Thread(target=Play)
 #start threads
 RunEmu.start()
 time.sleep(1)
-ViewPort = list(pag.locateAllOnScreen("SL1/PMD-AI-ML-PROJECT/imgs/Safe-StartupScreen.png",confidence=0.3))
+ViewPort = list(pag.locateAllOnScreen("SL1/PMD-AI-ML-PROJECT/imgs/Safe-StartupScreen.png",confidence=0.8))
 startUp.start()
 #end threads
 startUp.join()
