@@ -5,7 +5,6 @@ import numpy as np
 import pyautogui as pag
 import subprocess as sp
 import cv2 as cv
-from PIL import ImageGrab
 #from pyvirtualdisplay import Display
 from ewmh import EWMH
 import os, sys, json, math, datetime, time, threading
@@ -194,22 +193,53 @@ def StartUp():
     playGame.start()
     playGame.join()
 
+def GetVP():
+    time.sleep(1)
+    try:
+        ViewPort = list(pag.locateAllOnScreen("SL1/PMD-AI-ML-PROJECT/imgs/Safe-StartupScreen.png",confidence=0.9))
+        return ViewPort
+    except:
+        time.sleep(1)
+        try:
+            ViewPort = list(pag.locateAllOnScreen("SL1/PMD-AI-ML-PROJECT/imgs/Safe-StartupScreen.png",confidence=0.8))
+            return ViewPort
+        except:
+            time.sleep(1)
+            try:
+                ViewPort = list(pag.locateAllOnScreen("SL1/PMD-AI-ML-PROJECT/imgs/Safe-StartupScreen.png",confidence=0.7))
+                return ViewPort
+            except:
+                time.sleep(1)
+                try:
+                    ViewPort = list(pag.locateAllOnScreen("SL1/PMD-AI-ML-PROJECT/imgs/Safe-StartupScreen.png",confidence=0.6))
+                    return ViewPort
+                except:
+                    print("Can't find ViewPort...\nexiting...")
+                    exit()
+    
+
 #ViewPort and controls
 def Play():
-    VPList = list(ViewPort[0]) #[top,left,Width,Height]
-    print("VPList:",VPList)
-    print("center:",pag.center(ViewPort[0]))
-    print("Center/sides:\nLeft: (",list(pag.center(ViewPort[0]))[0]-VPList[2]/2,")\nRight: (",list(pag.center(ViewPort[0]))[0]+VPList[2]/2,")\nTop: (",list(pag.center(ViewPort[0]))[1]-VPList[3]/2,")\nBottom: (",list(pag.center(ViewPort[0]))[1]+VPList[3]/2,")")
-                                                       #   IDK WHICH ONE IS SUPPOSED TO WORK BECAUSE NONE DO   #
-    TrueVP = [list(pag.center(ViewPort[0]))[0]-VPList[2]/2,list(pag.center(ViewPort[0]))[1]-VPList[3]/2,VPList[2],VPList[3]] 
+    
+    #print("VPList:",VPList)
+    #print("center:",pag.center(ViewPort[0]))
+    #print("Center/sides:\nLeft: (",list(pag.center(ViewPort[0]))[0]-VPList[2]/2,")\nRight: (",list(pag.center(ViewPort[0]))[0]+VPList[2]/2,")\nTop: (",list(pag.center(ViewPort[0]))[1]-VPList[3]/2,")\nBottom: (",list(pag.center(ViewPort[0]))[1]+VPList[3]/2,")")
+    
     ###this defo does not work
     #TrueVP = list(ViewPort[0]) 
     ### TEST VALUE TO SEE IF ANYTHING CHANGES
     #TrueVP = [500, 500, 600, 700]
+    VPList = list(ViewPort[0]) #[top,left,Width,Height]
+    TrueVP = [list(pag.center(ViewPort[0]))[0]-VPList[2]/2,list(pag.center(ViewPort[0]))[1]-VPList[3]/2,VPList[2],VPList[3]] 
     while True:
         screen = pag.screenshot(region=(int(TrueVP[0]),int(TrueVP[1]),int(TrueVP[2]),int(TrueVP[3])))
         screen = np.array(screen) #bbox = left, top, right, bottom
+        desired_width = 400
+        aspect_ratio = screen.shape[1] / screen.shape[0]
+        desired_height = int(desired_width / aspect_ratio)
+        cv.namedWindow('ViewPort',cv.WINDOW_NORMAL)
         cv.imshow('ViewPort',cv.cvtColor(screen,cv.COLOR_BGR2RGB))
+        cv.resizeWindow('ViewPort',desired_width,desired_height)
         if cv.waitKey(25) & 0xFF == ord('q'):
             cv.destroyAllWindows()
             break
@@ -224,24 +254,7 @@ playGame = threading.Thread(target=Play)
 
 #start threads
 RunEmu.start()
-time.sleep(1)
-try:
-    ViewPort = list(pag.locateAllOnScreen("SL1/PMD-AI-ML-PROJECT/imgs/Safe-StartupScreen.png",confidence=0.9))
-except:
-    time.sleep(1)
-    try:
-        ViewPort = list(pag.locateAllOnScreen("SL1/PMD-AI-ML-PROJECT/imgs/Safe-StartupScreen.png",confidence=0.8))
-    except:
-        time.sleep(1)
-        try:
-            ViewPort = list(pag.locateAllOnScreen("SL1/PMD-AI-ML-PROJECT/imgs/Safe-StartupScreen.png",confidence=0.7))
-        except:
-            time.sleep(1)
-            try:
-                ViewPort = list(pag.locateAllOnScreen("SL1/PMD-AI-ML-PROJECT/imgs/Safe-StartupScreen.png",confidence=0.6))
-            except:
-                print("Can't find ViewPort...\nexiting...")
-                exit()
+ViewPort = GetVP()
 startUp.start()
 #end threads
 startUp.join()
