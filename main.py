@@ -6,7 +6,7 @@ import pyautogui as pag
 import subprocess as sp
 import cv2 as cv
 from PIL import ImageGrab
-from pyvirtualdisplay import Display
+#from pyvirtualdisplay import Display
 from ewmh import EWMH
 import os, sys, json, math, datetime, time, threading
 print('[',datetime.datetime.now(),']','Program is Running...')
@@ -193,14 +193,19 @@ def StartUp():
     testTrl.join()
     playGame.start()
     playGame.join()
-    RunEmu.join()
 
 #ViewPort and controls
 def Play():
-    VPList = list(ViewPort[0])
-    print(VPList)
+    VPList = list(ViewPort[0]) #[top,left,Width,Height]
+    print("VPList:",VPList)
+    print("center:",pag.center(ViewPort[0]))
+    print("Center/sides:\nLeft: (",list(pag.center(ViewPort[0]))[0]-VPList[2]/2,")\nRight: (",list(pag.center(ViewPort[0]))[0]+VPList[2]/2,")\nTop: (",list(pag.center(ViewPort[0]))[1]-VPList[3]/2,")\nBottom: (",list(pag.center(ViewPort[0]))[1]+VPList[3]/2,")")
+    ##IDK WHICH ONE IS SUPPOSED TO WORK BECAUSE NEITHER DO
+    TrueVP = [list(pag.center(ViewPort[0]))[0]-VPList[2]/2,list(pag.center(ViewPort[0]))[1]-VPList[3]/2,list(pag.center(ViewPort[0]))[0]+VPList[2]/2,list(pag.center(ViewPort[0]))[1]+VPList[3]/2] #bbox = left, top, right, bottom
+    #TrueVP = [list(pag.center(ViewPort[0]))[0]-VPList[2]/2,list(pag.center(ViewPort[0]))[1]-VPList[3]/2,VPList[2],VPList[3]] #bbox = left, top, right, bottom
+
     while True:
-        screen = np.array(ImageGrab.grab(bbox=(VPList)))
+        screen = np.array(ImageGrab.grab(bbox=(TrueVP))) #bbox = left, top, right, bottom
         cv.imshow('ViewPort',cv.cvtColor(screen,cv.COLOR_BGR2RGB))
 
 
