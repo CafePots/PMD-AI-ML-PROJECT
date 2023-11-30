@@ -74,41 +74,6 @@ personality ={
     "Are you a boy or a girl?":["Male","Female"] # :(
 }
 
-#instance thee class
-ewmh = EWMH()
-def getGBAWindowInfo():
-    # Get a list of all visible windows
-    all_windows = ewmh.getClientList()
-
-    # Define the title or other identifying information of the mGBA window
-    mGBA_window_title = "mGBA"
-
-    # Search for the mGBA window in the list of all windows
-    for window in all_windows:
-        if mGBA_window_title == window.get_wm_name():
-            mGBA_window = window
-            return mGBA_window
-GameName = "PMDRRT.gba"
-def runMGBA():
-    #mGBA with PMD final decision
-    print('[',datetime.datetime.now(),']','Running %s'% (GameName))
-    sp.run(['mgba','-7','SL1/PMD-AI-ML-PROJECT/%s'%(GameName)],stdin=sp.PIPE,text=True)
-    
-#this should swap to mGBA
-def swapToMGBA():
-    #print(ewmh.getClientList())
-    clList = ewmh.getClientList()
-    for Window in clList:
-        #print("Visible Name:",ewmh.getWmVisibleName(Window),"\nName:",ewmh.getWmName(Window),"\nPID:",ewmh.getWmPid(Window))
-        if ewmh.getWmName(Window) == "b'mGBA'":
-            ewmh.setActiveWindow(Window)
-            ewmh.display.flush()
-            location = pag.locateAllOnScreen("SL1/PMD-AI-ML-PROJECT/imgs/Safe-StartupScreen.png",confidence=0.9)
-            pag.click(pag.center(location))
-            print('[',datetime.datetime.now(),']','%s active'% (GameName))
-            if (location):
-                print(location)
-                return location
 #defining GBA controls as functions to make it easier to read
 #also bc this is kinda rudamentrary it makes it easier to change how they work later when im not being lazy
 def up():
@@ -172,6 +137,43 @@ def holdRTrig(duration):
     start = time.time()
     while time.time() - start < duration: #hold key for duration
         pag.press('s')
+
+
+#instance thee class
+ewmh = EWMH()
+def getGBAWindowInfo():
+    # Get a list of all visible windows
+    all_windows = ewmh.getClientList()
+
+    # Define the title or other identifying information of the mGBA window
+    mGBA_window_title = "mGBA"
+
+    # Search for the mGBA window in the list of all windows
+    for window in all_windows:
+        if mGBA_window_title == window.get_wm_name():
+            mGBA_window = window
+            return mGBA_window
+GameName = "PMDRRT.gba"
+def runMGBA():
+    #mGBA with PMD final decision
+    print('[',datetime.datetime.now(),']','Running %s'% (GameName))
+    sp.run(['mgba','-7','SL1/PMD-AI-ML-PROJECT/%s'%(GameName)],stdin=sp.PIPE,text=True)
+    
+#this should swap to mGBA
+def swapToMGBA():
+    #print(ewmh.getClientList())
+    clList = ewmh.getClientList()
+    for Window in clList:
+        #print("Visible Name:",ewmh.getWmVisibleName(Window),"\nName:",ewmh.getWmName(Window),"\nPID:",ewmh.getWmPid(Window))
+        if ewmh.getWmName(Window) == "b'mGBA'":
+            ewmh.setActiveWindow(Window)
+            ewmh.display.flush()
+            location = pag.locateAllOnScreen("SL1/PMD-AI-ML-PROJECT/imgs/Safe-StartupScreen.png",confidence=0.9)
+            pag.click(pag.center(location))
+            print('[',datetime.datetime.now(),']','%s active'% (GameName))
+            if (location):
+                print(location)
+                return location
 
 #test controls
 def testController():
