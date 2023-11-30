@@ -212,7 +212,23 @@ playGame = threading.Thread(target=Play)
 #start threads
 RunEmu.start()
 time.sleep(1)
-ViewPort = list(pag.locateAllOnScreen("SL1/PMD-AI-ML-PROJECT/imgs/Safe-StartupScreen.png",confidence=0.8))
+try:
+    ViewPort = list(pag.locateAllOnScreen("SL1/PMD-AI-ML-PROJECT/imgs/Safe-StartupScreen.png",confidence=0.9))
+except:
+    time.sleep(1)
+    try:
+        ViewPort = list(pag.locateAllOnScreen("SL1/PMD-AI-ML-PROJECT/imgs/Safe-StartupScreen.png",confidence=0.8))
+    except:
+        time.sleep(1)
+        try:
+            ViewPort = list(pag.locateAllOnScreen("SL1/PMD-AI-ML-PROJECT/imgs/Safe-StartupScreen.png",confidence=0.7))
+        except:
+            time.sleep(1)
+            try:
+                ViewPort = list(pag.locateAllOnScreen("SL1/PMD-AI-ML-PROJECT/imgs/Safe-StartupScreen.png",confidence=0.6))
+            except:
+                print("Can't find ViewPort...\nexiting...")
+                exit()
 startUp.start()
 #end threads
 startUp.join()
