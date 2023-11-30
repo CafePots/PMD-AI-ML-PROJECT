@@ -5,6 +5,7 @@ import numpy as np
 import pyautogui as pag
 import subprocess as sp
 import cv2 as cv
+from PIL import ImageGrab
 from pyvirtualdisplay import Display
 from ewmh import EWMH
 import os, sys, json, math, datetime, time, threading
@@ -13,8 +14,6 @@ print('[',datetime.datetime.now(),']','Program is Running...')
 #DOING PMD instead with pyboy
 #pyboy is a tool that bas functionality for AI and all that stuff :)
 #it only supports gb and gbc rn :(
-
-ScreenLocation = None #defined later at start up for when the startup process is run
 
 #dictionary of the personality questions <"question",["options"]>
 personality ={
@@ -107,7 +106,8 @@ def swapToMGBA():
             location = pag.locateAllOnScreen("SL1/PMD-AI-ML-PROJECT/imgs/Safe-StartupScreen.png",confidence=0.9)
             pag.click(pag.center(location))
             print('[',datetime.datetime.now(),']','%s active'% (GameName))
-            if (location != None):
+            if (location):
+                print(location)
                 return location
 #defining GBA controls as functions to make it easier to read
 #also bc this is kinda rudamentrary it makes it easier to change how they work later when im not being lazy
@@ -181,7 +181,6 @@ def testController():
     pag.press(['enter','enter','enter','enter','enter','enter'])
 
 def StartUp():
-    
     while (str(ewmh.getWmName(ewmh.getActiveWindow())) != "b'mGBA'"):
         print('waiting for emulator and/or rom...') #if you are having issues here, either mgba is not booting or you do not have the rom, or it is not named correctly.
         #print(ewmh.getWmName(ewmh.getActiveWindow()))
@@ -190,20 +189,33 @@ def StartUp():
     print('set to mGBA')
     testTrl.start()
     testTrl.join()
-    RunGame.join()
+    playGame.start()
+    playGame.join()
+    RunEmu.join()
+
+#ViewPort and controls
+def Play():
+    VPList = list(ViewPort)
+    while True:
+        screen = np.array(ImageGrab.grab(bbox=(ViewPort[0],ViewPort[1],ViewPort[2],ViewPort[3])))
+        cv.imshow('ViewPort',cv.cvtColor(screen,cv.COLOR_BGR2RGB))
+
 
 #threads
-RunGame = threading.Thread(target=runMGBA)
+RunEmu = threading.Thread(target=runMGBA)
 SwapToEmu = threading.Thread(target=swapToMGBA)
 startUp = threading.Thread(target=StartUp)
 testTrl = threading.Thread(target=testController)
+playGame = threading.Thread(target=Play)
 
 #start threads
-RunGame.start()
+RunEmu.start()
+time.sleep(1)
+ViewPort = list(pag.locateAllOnScreen("SL1/PMD-AI-ML-PROJECT/imgs/Safe-StartupScreen.png",confidence=0.3))
 startUp.start()
 #end threads
 startUp.join()
-RunGame.join()
+RunEmu.join()
 
 
 print('[',datetime.datetime.now(),']','Program Stopped...')
