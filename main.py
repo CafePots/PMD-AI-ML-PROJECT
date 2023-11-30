@@ -200,13 +200,19 @@ def Play():
     print("VPList:",VPList)
     print("center:",pag.center(ViewPort[0]))
     print("Center/sides:\nLeft: (",list(pag.center(ViewPort[0]))[0]-VPList[2]/2,")\nRight: (",list(pag.center(ViewPort[0]))[0]+VPList[2]/2,")\nTop: (",list(pag.center(ViewPort[0]))[1]-VPList[3]/2,")\nBottom: (",list(pag.center(ViewPort[0]))[1]+VPList[3]/2,")")
-    ##IDK WHICH ONE IS SUPPOSED TO WORK BECAUSE NEITHER DO
-    TrueVP = [list(pag.center(ViewPort[0]))[0]-VPList[2]/2,list(pag.center(ViewPort[0]))[1]-VPList[3]/2,list(pag.center(ViewPort[0]))[0]+VPList[2]/2,list(pag.center(ViewPort[0]))[1]+VPList[3]/2] #bbox = left, top, right, bottom
-    #TrueVP = [list(pag.center(ViewPort[0]))[0]-VPList[2]/2,list(pag.center(ViewPort[0]))[1]-VPList[3]/2,VPList[2],VPList[3]] #bbox = left, top, right, bottom
-
+                                                       #   IDK WHICH ONE IS SUPPOSED TO WORK BECAUSE NONE DO   #
+    TrueVP = [list(pag.center(ViewPort[0]))[0]-VPList[2]/2,list(pag.center(ViewPort[0]))[1]-VPList[3]/2,VPList[2],VPList[3]] 
+    ###this defo does not work
+    #TrueVP = list(ViewPort[0]) 
+    ### TEST VALUE TO SEE IF ANYTHING CHANGES
+    #TrueVP = [500, 500, 600, 700]
     while True:
-        screen = np.array(ImageGrab.grab(bbox=(TrueVP))) #bbox = left, top, right, bottom
+        screen = pag.screenshot(region=(int(TrueVP[0]),int(TrueVP[1]),int(TrueVP[2]),int(TrueVP[3])))
+        screen = np.array(screen) #bbox = left, top, right, bottom
         cv.imshow('ViewPort',cv.cvtColor(screen,cv.COLOR_BGR2RGB))
+        if cv.waitKey(25) & 0xFF == ord('q'):
+            cv.destroyAllWindows()
+            break
 
 
 #threads
