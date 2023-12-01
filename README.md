@@ -6,11 +6,12 @@ I just want to learn stuff about Machine learning and like PMD :) so it kinda wo
 ## Stuff you need to make sure that this works
 ### Python
 
+#### You can use the  virtual enviornmet with "source /your/file/location.txt"
+
 - numpy
 - pyautogui
 - subprocess
 - cv2 (*A.K.A. OpenCV*)
-- from virtualdisplay import Display
 - from ewmh import EWMH
 - os
 - sys
