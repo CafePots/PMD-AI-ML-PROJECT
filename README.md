@@ -6,7 +6,7 @@ I just want to learn stuff about Machine learning and like PMD :) so it kinda wo
 ## Stuff you need to make sure that this works
 ### Python
 
-#### You can use the  virtual enviornmet with "source /your/file/location.txt"
+#### You can use the  virtual enviornmet with "source /your/file/location/bin/activate"
 
 - numpy
 - pyautogui
