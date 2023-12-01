@@ -5,9 +5,8 @@ import numpy as np
 import pyautogui as pag
 import subprocess as sp
 import cv2 as cv
-#from pyvirtualdisplay import Display
 from ewmh import EWMH
-import os, sys, json, math, datetime, time, threading
+import datetime, time, threading
 print('[',datetime.datetime.now(),']','Program is Running...')
 #i picked a game that i want to make an ai for, i want to try and make an ai that can play Tunic.
 #DOING PMD instead with pyboy
@@ -167,8 +166,11 @@ def swapToMGBA():
         if ewmh.getWmName(Window) == "b'mGBA'":
             ewmh.setActiveWindow(Window)
             ewmh.display.flush()
-            location = pag.locateAllOnScreen("SL1/PMD-AI-ML-PROJECT/imgs/Safe-StartupScreen.png",confidence=0.9)
+            location = pag.locateAllOnScreen("SL1/PMD-AI-ML-PROJECT/imgs/Safe-StartupScreen.png",confidence=0.7)
+            pag.moveTo(pag.center(location))
+            print('move to..')
             pag.click(pag.center(location))
+            print('click...')
             print('[',datetime.datetime.now(),']','%s active'% (GameName))
             if (location):
                 print(location)
@@ -176,17 +178,21 @@ def swapToMGBA():
 
 #test controls
 def testController():
-    pag.sleep(10)
+    pag.sleep(3   )
     with pag.hold('z'):
         pag.press(['x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x'])
+        print("x spam while holding z run")
+    pag.sleep(4)
     pag.press(['enter','enter','enter','enter','enter','enter'])
+    print('enter,enter,enter....')
 
 def StartUp():
     while (str(ewmh.getWmName(ewmh.getActiveWindow())) != "b'mGBA'"):
         print('waiting for emulator and/or rom...') #if you are having issues here, either mgba is not booting or you do not have the rom, or it is not named correctly.
         #print(ewmh.getWmName(ewmh.getActiveWindow()))
-        ScreenLocation = swapToMGBA()
-        print("Screen Location:",ScreenLocation)
+        swapToMGBA()
+    ScreenLocation = swapToMGBA()
+    print("Screen Location:",ScreenLocation)
     print('set to mGBA')
     testTrl.start()
     testTrl.join()
@@ -216,7 +222,17 @@ def GetVP():
                 except:
                     print("Can't find ViewPort...\nexiting...")
                     exit()
-    
+
+def ImageOnScreen(file,confidence):
+    temp = None
+    try:
+        temp = pag.locateOnWindow(file,'mGBA',grayscale=False,confidence=confidence)
+    except:
+        return False
+    if temp == None:
+        return False
+    else:
+        return True
 
 #ViewPort and controls
 def Play():
@@ -247,7 +263,7 @@ def Play():
 
 #threads
 RunEmu = threading.Thread(target=runMGBA)
-SwapToEmu = threading.Thread(target=swapToMGBA)
+#SwapToEmu = threading.Thread(target=swapToMGBA)
 startUp = threading.Thread(target=StartUp)
 testTrl = threading.Thread(target=testController)
 playGame = threading.Thread(target=Play)
@@ -256,6 +272,7 @@ playGame = threading.Thread(target=Play)
 RunEmu.start()
 ViewPort = GetVP()
 startUp.start()
+
 #end threads
 startUp.join()
 RunEmu.join()
