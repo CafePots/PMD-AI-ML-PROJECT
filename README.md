@@ -11,7 +11,7 @@ I just want to learn stuff about Machine learning and like PMD :) so it kinda wo
 - numpy
 - pyautogui
 - subprocess
-- cv2 (*A.K.A. OpenCV*)
+- cv2 (*A.K.A. python-opencv*)
 - from ewmh import EWMH
 - os
 - sys
