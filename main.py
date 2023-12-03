@@ -5,6 +5,7 @@ import numpy as np
 import pyautogui as pag
 import subprocess as sp
 import cv2 as cv
+import pytesseract as pytes
 from ewmh import EWMH
 import datetime, time, threading
 print('[',datetime.datetime.now(),']','Program is Running...')
@@ -236,30 +237,24 @@ def ImageOnScreen(file,confidence):
 
 #ViewPort and controls
 def Play():
-    
-    #print("VPList:",VPList)
-    #print("center:",pag.center(ViewPort[0]))
-    #print("Center/sides:\nLeft: (",list(pag.center(ViewPort[0]))[0]-VPList[2]/2,")\nRight: (",list(pag.center(ViewPort[0]))[0]+VPList[2]/2,")\nTop: (",list(pag.center(ViewPort[0]))[1]-VPList[3]/2,")\nBottom: (",list(pag.center(ViewPort[0]))[1]+VPList[3]/2,")")
-    
-    ###this defo does not work
-    #TrueVP = list(ViewPort[0]) 
-    ### TEST VALUE TO SEE IF ANYTHING CHANGES
-    #TrueVP = [500, 500, 600, 700]
+    #ViewPort
     VPList = list(ViewPort[0]) #[top,left,Width,Height]
     TrueVP = [list(pag.center(ViewPort[0]))[0]-VPList[2]/2,list(pag.center(ViewPort[0]))[1]-VPList[3]/2,VPList[2],VPList[3]] 
+    desired_width = 400
+    cv.namedWindow('ViewPort',cv.WINDOW_NORMAL)
     while True:
         screen = pag.screenshot(region=(int(TrueVP[0]),int(TrueVP[1]),int(TrueVP[2]),int(TrueVP[3])))
         screen = np.array(screen) #bbox = left, top, right, bottom
-        desired_width = 400
         aspect_ratio = screen.shape[1] / screen.shape[0]
         desired_height = int(desired_width / aspect_ratio)
-        cv.namedWindow('ViewPort',cv.WINDOW_NORMAL)
+        TxtOnScreen = pytes.image_to_string(screen)
+        print(TxtOnScreen)
         cv.imshow('ViewPort',cv.cvtColor(screen,cv.COLOR_BGR2RGB))
         cv.resizeWindow('ViewPort',desired_width,desired_height)
         if cv.waitKey(25) & 0xFF == ord('q'):
             cv.destroyAllWindows()
             break
-
+        
 
 #threads
 RunEmu = threading.Thread(target=runMGBA)
