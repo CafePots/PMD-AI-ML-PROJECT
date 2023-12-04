@@ -237,9 +237,128 @@ def ImageOnScreen(file,confidence):
         return False
     else:
         return True
+    
+#json handler that stores inputs given situations, player data (e.g. Healh, inventory, moves, which charachter)
+def json_handler():
+    Rank = {
+        "Rank":{
+            "RankName":"bronze",
+            "RankXP":0
+        }
+    }
+    GameState={
+        "GameState":"CutScene" #either CutScene, Overworld, or Dungeon
+    }
+    TeamData = { 
+        "Team1":{
+            "member-1":{
+                "pokemon":"",
+                "move-1":"",
+                "move-2":"",
+                "move-3":"",
+                "move-4":"",
+                "held-item":"",
+                "HP":0,              #https://bulbapedia.bulbagarden.net/wiki/Stat_(Mystery_Dungeon)#Stats
+                "max-HP":0,        
+                "Attack":0,
+                "Defense":0,
+                "SP-Attack":0,
+                "SP-Defense":0,
+                "Speed": 0, #never actually used for gameplay, the stat does nothing in any of the PMD games until super PMD where the stat is used to increase accuracy
+                "Travel-Speed":0, #on a scale of +/-5  afflictions that effect speed are coinsidered status effects in PMD RRT and only make you move/have an action more or less each turn.
+                "Belly":100, #Defaults to 100 at the start of a Dungeon and goes down from there.
+                "Stat-mods":{ # on a +/-10 scale with each following a percentage multiplier, these reset when a Pokémon leaves a dungeon, advances a floor, or steps on a Wonder Tile.
+                    "HP":0,
+                    "Attack":0,
+                    "Defense":0,
+                    "SP-Attack":0,
+                    "SP-Defense":0,
+                    "Speed": 0
+                }
+            },
+            "member-2":{
+                "pokemon":"",
+                "move-1":"",
+                "move-2":"",
+                "move-3":"",
+                "move-4":"",
+                "held-item":"",
+                "HP":0,
+                "max-HP":0,        #https://bulbapedia.bulbagarden.net/wiki/Stat_(Mystery_Dungeon)#Stats
+                "Attack":0,
+                "Defense":0,
+                "SP-Attack":0,
+                "SP-Defense":0,
+                "Speed": 0, #never actually used for gameplay, the stat does nothing in any of the PMD games until super PMD where the stat is used to increase accuracy
+                "Travel-Speed":0, #on a scale of +/-5  afflictions that effect speed are coinsidered status effects in PMD RRT and only make you move/have an action more or less each turn.
+                "Belly":100, #Defaults to 100 at the start of a Dungeon and goes down from there.
+                "Stat-mods":{ # on a +/-10 scale with each following a percentage multiplier, these reset when a Pokémon leaves a dungeon, advances a floor, or steps on a Wonder Tile.
+                    "HP":0,
+                    "Attack":0,
+                    "Defense":0,
+                    "SP-Attack":0,
+                    "SP-Defense":0,
+                    "Speed": 0
+                }
+            },
+            "member-3":{
+                "pokemon":"",
+                "move-1":"",
+                "move-2":"",
+                "move-3":"",
+                "move-4":"",
+                "held-item":"",
+                "HP":0,
+                "max-HP":0,        #https://bulbapedia.bulbagarden.net/wiki/Stat_(Mystery_Dungeon)#Stats
+                "Attack":0,
+                "Defense":0,
+                "SP-Attack":0,
+                "SP-Defense":0,
+                "Speed": 0, #never actually used for gameplay, the stat does nothing in any of the PMD games until super PMD where the stat is used to increase accuracy
+                "Travel-Speed":0, #on a scale of +/-5  afflictions that effect speed are coinsidered status effects in PMD RRT and only make you move/have an action more or less each turn.
+                "Belly":100, #Defaults to 100 at the start of a Dungeon and goes down from there.
+                "Stat-mods":{ # on a +/-10 scale with each following a percentage multiplier, these reset when a Pokémon leaves a dungeon, advances a floor, or steps on a Wonder Tile.
+                    "HP":0,
+                    "Attack":0,
+                    "Defense":0,
+                    "SP-Attack":0,
+                    "SP-Defense":0,
+                    "Speed": 0
+                }
+            }
+        }
+    }
+    ToolBox = {
+        "ItemsHeld":0,
+        "Max-Capacity":20,
+        "Items":{
+            #item:description,
 
-#ViewPort and controls
-def Play():
+        }
+    }
+    Kangaskhan = {
+        "Items":{ #can store up to 999 of each item in game in Red Rescue Team.
+            #item:description, 
+        }
+    }
+    Persian = {
+        "money":0
+    }
+    Missions = {
+        'Name':{
+            'Place':"",
+            'Floor':"",
+            'Task':"",
+            'Type':"" #A B C D ...
+        }
+    }
+
+#AI input handler, this should make decisions on the data stored by the json handler
+def Player_Input():
+    NotImplemented #yet
+
+#ViewPort
+def ViewPort_and_imageProcessing():
     #ViewPort
     VPList = list(ViewPort[0]) #[top,left,Width,Height]
     TrueVP = [list(pag.center(ViewPort[0]))[0]-VPList[2]/2,list(pag.center(ViewPort[0]))[1]-VPList[3]/2,VPList[2],VPList[3]] 
@@ -256,6 +375,7 @@ def Play():
         TxtOnScreen = pytes.image_to_string(screen,config="--psm 11") #--psm 11, works ok
         print(TxtOnScreen)
         cv2.imshow('ViewPort',cv2.cvtColor(screen,cv2.COLOR_BGR2RGB))
+        swapToMGBA()
         cv2.resizeWindow('ViewPort',desired_width,desired_height)
         if cv2.waitKey(25) & 0xFF == ord('q'):
             cv2.destroyAllWindows()
@@ -267,7 +387,7 @@ RunEmu = threading.Thread(target=runMGBA)
 #SwapToEmu = threading.Thread(target=swapToMGBA)
 startUp = threading.Thread(target=StartUp)
 testTrl = threading.Thread(target=testController)
-playGame = threading.Thread(target=Play)
+playGame = threading.Thread(target=ViewPort_and_imageProcessing)
 
 #start threads
 RunEmu.start()
