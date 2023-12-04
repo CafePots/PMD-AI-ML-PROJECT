@@ -4,10 +4,10 @@
 import numpy as np
 import pyautogui as pag
 import subprocess as sp
-import cv2 as cv
+import cv2
 import pytesseract as pytes
 from ewmh import EWMH
-import datetime, time, threading
+import datetime, time, threading, re, json
 print('[',datetime.datetime.now(),']','Program is Running...')
 #i picked a game that i want to make an ai for, i want to try and make an ai that can play Tunic.
 #DOING PMD instead with pyboy
@@ -138,6 +138,9 @@ def holdRTrig(duration):
         pag.press('s')
 
 
+def removeNonWords(text): #NOT FULLY IMPLIMENTED
+    return re.sub(r"[^\w]", "", text)
+
 #instance thee class
 ewmh = EWMH()
 def getGBAWindowInfo():
@@ -241,18 +244,21 @@ def Play():
     VPList = list(ViewPort[0]) #[top,left,Width,Height]
     TrueVP = [list(pag.center(ViewPort[0]))[0]-VPList[2]/2,list(pag.center(ViewPort[0]))[1]-VPList[3]/2,VPList[2],VPList[3]] 
     desired_width = 400
-    cv.namedWindow('ViewPort',cv.WINDOW_NORMAL)
+    cv2.namedWindow('ViewPort',cv2.WINDOW_NORMAL)
     while True:
         screen = pag.screenshot(region=(int(TrueVP[0]),int(TrueVP[1]),int(TrueVP[2]),int(TrueVP[3])))
         screen = np.array(screen) #bbox = left, top, right, bottom
+        processer = cv2.cvtColor(screen, cv2.COLOR_BGR2GRAY) #make gray
+        screen = cv2.threshold(processer, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1] #add a threshhold for visablility
+        #screen = 255 - screen
         aspect_ratio = screen.shape[1] / screen.shape[0]
         desired_height = int(desired_width / aspect_ratio)
-        TxtOnScreen = pytes.image_to_string(screen)
+        TxtOnScreen = pytes.image_to_string(screen,config="--psm 11") #--psm 11, works ok
         print(TxtOnScreen)
-        cv.imshow('ViewPort',cv.cvtColor(screen,cv.COLOR_BGR2RGB))
-        cv.resizeWindow('ViewPort',desired_width,desired_height)
-        if cv.waitKey(25) & 0xFF == ord('q'):
-            cv.destroyAllWindows()
+        cv2.imshow('ViewPort',cv2.cvtColor(screen,cv2.COLOR_BGR2RGB))
+        cv2.resizeWindow('ViewPort',desired_width,desired_height)
+        if cv2.waitKey(25) & 0xFF == ord('q'):
+            cv2.destroyAllWindows()
             break
         
 
