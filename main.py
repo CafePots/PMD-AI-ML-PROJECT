@@ -191,6 +191,7 @@ def testController():
     print('enter,enter,enter....')
 
 def StartUp():
+    json_handler()
     while (str(ewmh.getWmName(ewmh.getActiveWindow())) != "b'mGBA'"):
         print('waiting for emulator and/or rom...') #if you are having issues here, either mgba is not booting or you do not have the rom, or it is not named correctly.
         #print(ewmh.getWmName(ewmh.getActiveWindow()))
@@ -352,6 +353,20 @@ def json_handler():
             'Type':"" #A B C D ...
         }
     }
+    with open("SL1/PMD-AI-ML-PROJECT/Data/rank.json","w") as r:
+        json.dump(json.dumps(Rank),r)
+    with open("SL1/PMD-AI-ML-PROJECT/Data/bank.json","w") as r:
+        json.dump(json.dumps(Persian),r)
+    with open("SL1/PMD-AI-ML-PROJECT/Data/ibank.json","w") as r:
+        json.dump(json.dumps(Kangaskhan),r)
+    with open("SL1/PMD-AI-ML-PROJECT/Data/missions.json","w") as r:
+        json.dump(json.dumps(Missions),r)
+    with open("SL1/PMD-AI-ML-PROJECT/Data/toolbox.json","w") as r:
+        json.dump(json.dumps(ToolBox),r)
+    with open("SL1/PMD-AI-ML-PROJECT/Data/teams.json","w") as r:
+        json.dump(json.dumps(TeamData),r)
+    with open("SL1/PMD-AI-ML-PROJECT/Data/GSball.json","w") as r:
+        json.dump(json.dumps(GameState),r)
 
 #AI input handler, this should make decisions on the data stored by the json handler
 def Player_Input():
@@ -372,7 +387,7 @@ def ViewPort_and_imageProcessing():
         #screen = 255 - screen
         aspect_ratio = screen.shape[1] / screen.shape[0]
         desired_height = int(desired_width / aspect_ratio)
-        TxtOnScreen = pytes.image_to_string(screen,config="--psm 11") #--psm 11, works ok
+        TxtOnScreen = pytes.image_to_string(screen,config="--psm 11",lang="eng").strip() #--psm 11, works ok
         print(TxtOnScreen)
         cv2.imshow('ViewPort',cv2.cvtColor(screen,cv2.COLOR_BGR2RGB))
         swapToMGBA()
