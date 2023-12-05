@@ -379,19 +379,41 @@ def ViewPort_and_imageProcessing():
     TrueVP = [list(pag.center(ViewPort[0]))[0]-VPList[2]/2,list(pag.center(ViewPort[0]))[1]-VPList[3]/2,VPList[2],VPList[3]] 
     desired_width = 400
     cv2.namedWindow('ViewPort',cv2.WINDOW_NORMAL)
+    cv2.namedWindow('BW',cv2.WINDOW_NORMAL)
+    cv2.namedWindow('CropTop',cv2.WINDOW_NORMAL)
+    
     while True:
         screen = pag.screenshot(region=(int(TrueVP[0]),int(TrueVP[1]),int(TrueVP[2]),int(TrueVP[3])))
         screen = np.array(screen) #bbox = left, top, right, bottom
         processer = cv2.cvtColor(screen, cv2.COLOR_BGR2GRAY) #make gray
-        screen = cv2.threshold(processer, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1] #add a threshhold for visablility
-        #screen = 255 - screen
+        thresh = cv2.threshold(processer, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1] #add a threshhold for visablility
+        #thresh = 255 - thresh #inverts the black and white threshhold
+        #Resized for text
+        height ,width = thresh.shape[:2]
+        crop = thresh[height - int(height * 0.33):height,80:width - 80]
+
+        #get ratio'd bitch
         aspect_ratio = screen.shape[1] / screen.shape[0]
         desired_height = int(desired_width / aspect_ratio)
-        TxtOnScreen = pytes.image_to_string(screen,config="--psm 11",lang="eng").strip() #--psm 11, works ok
-        print(TxtOnScreen)
+        thresh_as_ra= thresh.shape[1]/thresh.shape[0]
+        thresh_desired_height = int(desired_width / thresh_as_ra)
+        crop_as_ra= crop.shape[1]/crop.shape[0]
+        crop_desired_height = int(desired_width / crop_as_ra*3)
+        
+        #full color
         cv2.imshow('ViewPort',cv2.cvtColor(screen,cv2.COLOR_BGR2RGB))
-        swapToMGBA()
         cv2.resizeWindow('ViewPort',desired_width,desired_height)
+        #black and white for text
+        cv2.imshow('BW',cv2.cvtColor(thresh,cv2.COLOR_BGR2RGB))
+        cv2.resizeWindow('BW',desired_width,thresh_desired_height)
+        #resized to show only text
+        cv2.imshow('CropTop',cv2.cvtColor(crop,cv2.COLOR_BGR2RGB))
+        cv2.resizeWindow('CropTop',desired_width,crop_desired_height)
+        #TxtOnScreen = pytes.image_to_string(thresh,config="--psm 11",lang="eng").strip() #--psm 11, works ok
+        CropedTxtOnScreen = pytes.image_to_string(crop,lang="eng").strip() #--psm 11, works ok
+        #print(TxtOnScreen)
+        print(CropedTxtOnScreen)
+        swapToMGBA()
         if cv2.waitKey(25) & 0xFF == ord('q'):
             cv2.destroyAllWindows()
             break
