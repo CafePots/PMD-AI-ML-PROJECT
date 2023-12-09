@@ -390,7 +390,7 @@ def ViewPort_and_imageProcessing():
         #thresh = 255 - thresh #inverts the black and white threshhold
         #Resized for text
         height ,width = thresh.shape[:2]
-        crop = thresh[height - int(height * 0.33):height,80:width - 80]
+        crop = thresh[height - int(height * 0.3):height,80:width - 80]
 
         #get ratio'd bitch
         aspect_ratio = screen.shape[1] / screen.shape[0]
